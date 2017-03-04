@@ -55,5 +55,6 @@ char *image_bit_crypt_decrypt(Image *image) {
         }
     }
     
+    text[text_len - 1] = NULL; //for safety reasons
     return text;
 }

@@ -1,29 +1,59 @@
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "Image.h"
 #include "ImageBitCrypt.h"
 
-/**
- * Just algorithm tests
- * @return 
- */
-int main() {
-    struct Image image;
-    image_init_from_file(&image, "me.png");
+enum {
+    MODE_ENCRYPT = 0,
+    MODE_DECRYPT = 1
+};
 
-    const char *str1_raw = "This is a test number one.";
-    image_bit_crypt_encrypt(&image, str1_raw);
-    
-    char *str1_decoded = image_bit_crypt_decrypt(&image);
-    
-    if (strcmp(str1_raw, str1_decoded) != 0) {
-        printf("Encode/Decode error: \"%s\" != \"%s\" (length %ld instead of %ld)\n", str1_decoded, str1_raw, strlen(str1_decoded), strlen(str1_raw));
-        return 1;
+void printUsage(void);
+
+int main(int argc, char *argv[]) {
+    struct Image image;
+    char *str1_decoded = NULL;
+    long mode;
+    const char *message = NULL;
+
+    switch (argc) {
+        case 3:
+            message = argv[2];
+        case 2:
+            mode = strtol(argv[1], NULL, 10);
+            break;
+        default:
+            fprintf(stderr, "Invalid number of arguments. ");
+            printUsage();
+            return EXIT_FAILURE;
     }
-    
-    printf("All fine\n");
+
+    switch (mode) {
+        case MODE_ENCRYPT:
+            image_init_from_file(&image, "me.png");
+            image_bit_crypt_encrypt(&image, message);
+            image_save_to_file(&image, "me_encrypted.png");
+            printf("Message encrypted successfully.\n");
+            break;
+        case MODE_DECRYPT:
+            image_init_from_file(&image, "me_encrypted.png");
+            str1_decoded = image_bit_crypt_decrypt(&image);
+            printf("Decrypted message: %s\n", str1_decoded);
+            break;
+        default:
+            fprintf(stderr, "Invalid mode. ");
+            printUsage();
+            return EXIT_FAILURE;
+    }
 
     free(str1_decoded);
-    return 0;
+    return EXIT_SUCCESS;
+}
+
+void printUsage(void) {
+    fprintf(stderr, "Usage: ./steganography_image <mode> [text_to_encode]\n"
+        "<mode> can be either:\n"
+        "\t0 - encryption (encrypts file me.png and writes it to me_encrypted.png)\n"
+        "\t1 - decryption (reads file me_encrypted.png and prints out decrypted message)\n"
+        "[text_to_encode] must be a single word (no whitespaces)\n");
 }

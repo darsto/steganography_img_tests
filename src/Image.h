@@ -14,6 +14,16 @@ typedef struct Image {
     unsigned char *data;
 } Image;
 
+/**
+ * Load image from disk
+ * @param filename filename with full path and extension
+ */
 void image_init_from_file(Image *image, const char *filename);
+
+/**
+ * Save image to disk
+ * @param filename filename with full path and extension
+ */
+void image_save_to_file(Image *image, const char *filename);
 
 #endif //STEGANOGRAPHY_IMAGE_IMAGE_H

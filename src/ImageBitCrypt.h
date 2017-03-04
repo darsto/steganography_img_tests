@@ -9,7 +9,16 @@
 
 #include "Image.h"
 
+/**
+ * Encode text inside image
+ * @param text string to encode ending with NULL
+ */
 void image_bit_crypt_encrypt(Image *image, const char *text);
+
+/**
+ * Decode text from image
+ * @return heap-allocated string ending with NULL. It has to deleted manually
+ */
 char *image_bit_crypt_decrypt(Image *image);
 
 #endif //STEGANOGRAPHY_IMAGE_IMAGEBITCRYPT_H
