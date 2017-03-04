@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
             message = argv[2];
         case 2:
             mode = strtol(argv[1], NULL, 10);
-            break;
+            if (mode == 1 || argc != 2) break; //won't break with mode == 1 and argc == 2
         default:
             fprintf(stderr, "Invalid number of arguments. ");
             printUsage();
