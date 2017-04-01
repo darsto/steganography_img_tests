@@ -24,7 +24,7 @@ void printUsage(void) {
 }
 
 void encrypt(Image *image, const char *data, size_t data_len) {
-    size_t str_encrypted_len = image_bit_crypt_encrypt(image, data);
+    size_t str_encrypted_len = image_bit_crypt_encrypt(image, data, data_len);
     
     if (str_encrypted_len == data_len) {
         printf("Message encrypted successfully.\n");
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     switch (mode) {
         case MODE_ENCRYPT:
             image_init_from_file(&image, "me.png");
-            encrypt(&image, message, strlen(message));
+            encrypt(&image, message, strlen(message) + 1);
             image_save_to_file(&image, "me_encrypted.png");
             break;
         case MODE_DECRYPT:

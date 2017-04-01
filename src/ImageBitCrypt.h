@@ -19,7 +19,7 @@ extern const int IMAGE_BIT_CRYPT_STORAGE_BITS_PER_BYTE; /* 1 <= x <= 8 */
  * @return number of encoded characters.
  * It will be equal or smaller than strlen(text)
  */
-size_t image_bit_crypt_encrypt(Image *image, const char *data);
+size_t image_bit_crypt_encrypt(Image *image, const char *data, size_t data_len);
 
 /**
  * Decode raw data from image
