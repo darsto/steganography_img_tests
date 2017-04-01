@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Image.h"
 #include "ImageBitCrypt.h"
 
@@ -8,11 +9,34 @@ enum {
     MODE_DECRYPT = 1
 };
 
-void printUsage(void);
+void printUsage(void) {
+    fprintf(stderr, "Usage: ./steganography_image <mode> [text_to_encode]\n"
+        "<mode> can be either:\n"
+        "\t0 - encryption (encrypts file me.png and writes it to me_encrypted.png)\n"
+        "\t1 - decryption (reads file me_encrypted.png and prints out decrypted message)\n"
+        "[text_to_encode] must be a single word (no whitespaces)\n");
+}
+
+void encrypt(Image *image, const char *data, size_t data_len) {
+    size_t str_encrypted_len = image_bit_crypt_encrypt(image, data);
+    
+    if (str_encrypted_len == data_len) {
+        printf("Message encrypted successfully.\n");
+    } else {
+        printf("Warning: Message encrypted just partially. Wrote %zu out of %zu bytes\n", str_encrypted_len, data_len);
+    }
+}
+
+void decrypt(Image *image) {
+    char *str_decoded = calloc((size_t) image->width * image->height * image->channels * IMAGE_BIT_CRYPT_STORAGE_BITS_PER_BYTE / 8, 1);
+    size_t str_decoded_len = image_bit_crypt_decrypt(image, str_decoded);
+    
+    printf("Decrypted message: %.*s\n", (int) str_decoded_len, str_decoded);
+    free(str_decoded);
+}
 
 int main(int argc, char *argv[]) {
     struct Image image;
-    char *str1_decoded = NULL;
     long mode;
     const char *message = NULL;
 
@@ -31,14 +55,12 @@ int main(int argc, char *argv[]) {
     switch (mode) {
         case MODE_ENCRYPT:
             image_init_from_file(&image, "me.png");
-            image_bit_crypt_encrypt(&image, message);
+            encrypt(&image, message, strlen(message));
             image_save_to_file(&image, "me_encrypted.png");
-            printf("Message encrypted successfully.\n");
             break;
         case MODE_DECRYPT:
             image_init_from_file(&image, "me_encrypted.png");
-            str1_decoded = image_bit_crypt_decrypt(&image);
-            printf("Decrypted message: %s\n", str1_decoded);
+            decrypt(&image);
             break;
         default:
             fprintf(stderr, "Invalid mode. ");
@@ -46,14 +68,5 @@ int main(int argc, char *argv[]) {
             return EXIT_FAILURE;
     }
 
-    free(str1_decoded);
     return EXIT_SUCCESS;
-}
-
-void printUsage(void) {
-    fprintf(stderr, "Usage: ./steganography_image <mode> [text_to_encode]\n"
-        "<mode> can be either:\n"
-        "\t0 - encryption (encrypts file me.png and writes it to me_encrypted.png)\n"
-        "\t1 - decryption (reads file me_encrypted.png and prints out decrypted message)\n"
-        "[text_to_encode] must be a single word (no whitespaces)\n");
 }

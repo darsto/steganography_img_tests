@@ -7,18 +7,28 @@
 #ifndef STEGANOGRAPHY_IMAGE_IMAGEBITCRYPT_H
 #define STEGANOGRAPHY_IMAGE_IMAGEBITCRYPT_H
 
+#include <stdlib.h>
 #include "Image.h"
 
-/**
- * Encode text inside image
- * @param text string to encode ending with NULL
- */
-void image_bit_crypt_encrypt(Image *image, const char *text);
+/** Amount of bits of each image byte used to hold hidden data */
+extern const int IMAGE_BIT_CRYPT_STORAGE_BITS_PER_BYTE; /* 1 <= x <= 8 */
 
 /**
- * Decode text from image
- * @return heap-allocated string ending with NULL. It has to deleted manually
+ * Encode raw data inside image
+ * @param data raw data to encode
+ * @return number of encoded characters.
+ * It will be equal or smaller than strlen(text)
  */
-char *image_bit_crypt_decrypt(Image *image);
+size_t image_bit_crypt_encrypt(Image *image, const char *data);
+
+/**
+ * Decode raw data from image
+ * @param data output buffer to store raw data into.
+ * The buffer must be of at least the following size:
+ * image->width * image->height * image->channels * IMAGE_BIT_CRYPT_STORAGE_BITS_PER_BYTE / 8
+ * The outputted data will be null-terminated
+ * @return number of decoded characters
+ */
+size_t image_bit_crypt_decrypt(const Image *image, char *data);
 
 #endif //STEGANOGRAPHY_IMAGE_IMAGEBITCRYPT_H
