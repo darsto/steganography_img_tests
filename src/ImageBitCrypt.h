@@ -26,7 +26,6 @@ size_t image_bit_crypt_encrypt(Image *image, const char *data, size_t data_len);
  * @param data output buffer to store raw data into.
  * The buffer must be of at least the following size:
  * image->width * image->height * image->channels * IMAGE_BIT_CRYPT_STORAGE_BITS_PER_BYTE / 8
- * The outputted data will be null-terminated
  * @return number of decoded characters
  */
 size_t image_bit_crypt_decrypt(const Image *image, char *data);
