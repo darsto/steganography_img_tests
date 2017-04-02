@@ -5,7 +5,13 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isystem ${PROJECT_SOURCE_DIR}/ext")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isystem ${PROJECT_SOURCE_DIR}/ext -pedantic -Wall -Wextra -Werror \
+    -Wno-missing-braces -Wno-missing-field-initializers -Wno-unused-variable -Wno-unused-parameter \
+    -Wformat=2 -Wswitch-default -Wswitch-enum -Wcast-align -Wpointer-arith \
+    -Wbad-function-cast -Wstrict-overflow=5 -Wstrict-prototypes -Winline \
+    -Wundef -Wnested-externs -Wcast-qual -Wshadow -Wunreachable-code \
+    -Wlogical-op -Wfloat-equal -Wstrict-aliasing=2 -Wredundant-decls \
+    -Wold-style-definition")
 
 set(STB_IMAGE_FILE "${PROJECT_SOURCE_DIR}/ext/stb_image.h")
 set(STB_IMAGE_WRITE_FILE "${PROJECT_SOURCE_DIR}/ext/stb_image_write.h")
