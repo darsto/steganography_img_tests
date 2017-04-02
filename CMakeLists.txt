@@ -3,9 +3,9 @@ project(steganography_image C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isystem ${PROJECT_SOURCE_DIR}/ext -pedantic -Wall -Wextra -Werror \
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic -Wall -Wextra -Werror \
     -Wno-missing-braces -Wno-missing-field-initializers -Wno-unused-variable -Wno-unused-parameter \
     -Wformat=2 -Wswitch-default -Wswitch-enum -Wcast-align -Wpointer-arith \
     -Wbad-function-cast -Wstrict-overflow=5 -Wstrict-prototypes -Winline \
@@ -26,5 +26,6 @@ endif()
 
 set(SOURCE_FILES src/main.c src/Image.h src/Image.c src/ImageBitCrypt.c src/ImageBitCrypt.h src/ImageRecurrentBitCrypt.h src/ImageRecurrentBitCrypt.c)
 find_package(GMP REQUIRED)
+include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/ext")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} m gmp)
