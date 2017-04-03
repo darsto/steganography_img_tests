@@ -19,10 +19,9 @@ union ImageRecurrentBitCryptKey {
     uint64_t val;
     struct {
         unsigned int version : 4; /* currently unused */
-        unsigned int offsetX : 10;
-        unsigned int offsetY : 10;
-        int offsetDeltaX : 8;
-        int offsetDeltaY : 8;
+        unsigned int reserved : 4;
+        unsigned int offsetX : 8;
+        unsigned int offsetY : 8;
     };
 };
 

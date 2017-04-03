@@ -9,6 +9,7 @@
 #include <string.h>
 #include "Image.h"
 #include "ImageBitCrypt.h"
+#include "ImageRecurrentBitCrypt.h"
 
 enum {
     MODE_ENCRYPT = 0,
@@ -24,7 +25,8 @@ void printUsage(void) {
 }
 
 void encrypt(Image *image, const char *data, size_t data_len) {
-    size_t str_encrypted_len = image_bit_crypt_encrypt(image, data, data_len);
+    union ImageRecurrentBitCryptKey key = { .offsetX = 5, .offsetY = 5 };
+    size_t str_encrypted_len = image_recurrent_bit_crypt_encrypt(image, data, data_len, key.val);
     
     if (str_encrypted_len == data_len) {
         printf("Message encrypted successfully.\n");
